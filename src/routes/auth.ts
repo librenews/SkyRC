@@ -473,6 +473,9 @@ router.get('/oauth-callback', async (req, res) => {
     };
     console.log('💾 Storing session data:', sessionData);
     sessionStore.set(sessionId, sessionData);
+    console.log('✅ Session stored successfully with ID:', sessionId);
+    console.log('🔍 Session store size:', sessionStore.size);
+    console.log('🔍 Session store keys:', Array.from(sessionStore.keys()));
     
     // Set session cookie for mobile Safari compatibility
     res.cookie('skyrc_session_id', sessionId, {
@@ -590,6 +593,9 @@ router.get('/session/:sessionId', (req, res) => {
   
   const session = sessionStore.get(sessionId);
   console.log('📦 Session found:', !!session);
+  console.log('🔍 Session store size:', sessionStore.size);
+  console.log('🔍 Session store keys:', Array.from(sessionStore.keys()));
+  console.log('🔍 Looking for session ID:', sessionId);
   
   if (!session) {
     console.log('❌ Session not found');
