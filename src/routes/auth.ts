@@ -109,10 +109,18 @@ const initializeOAuthClient = async () => {
     const isDevelopment = process.env.NODE_ENV === 'development';
     const port = process.env.PORT || '3001';
     
+    console.log('🔍 Environment variables debug:');
+    console.log('  NODE_ENV:', process.env.NODE_ENV);
+    console.log('  PORT:', process.env.PORT);
+    console.log('  CLIENT_URL:', process.env.CLIENT_URL);
+    console.log('  isDevelopment:', isDevelopment);
+    
     // Use different URLs for development vs production
     const baseUrl = isDevelopment 
       ? `http://127.0.0.1:${port}` 
       : process.env.CLIENT_URL;
+    
+    console.log('  baseUrl:', baseUrl);
     
     if (!baseUrl) {
       throw new Error('CLIENT_URL environment variable is required for production');
