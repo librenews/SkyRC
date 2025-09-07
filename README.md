@@ -21,72 +21,266 @@ A modern, real-time chatroom server where each URL route becomes a chat room, po
 - **BlueSky OAuth** for authentication
 
 ### Frontend
-- **React** with **TypeScript**
-- **Tailwind CSS** for styling
+- **HTML/CSS/JavaScript** (vanilla, no framework)
+- **Responsive CSS** with mobile-first design
 - **Socket.IO Client** for real-time features
-- **Lucide React** for icons
 
-## Quick Start
+## Local Development Setup
 
 ### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- BlueSky developer account (for OAuth setup)
+- **Node.js 18+** 
+- **npm** or **yarn**
+- **BlueSky account** (for OAuth setup)
 
-### Installation
+### Step 1: Clone and Install
 
-1. **Clone and install dependencies:**
-   ```bash
-   git clone <your-repo>
-   cd skyrc
-   npm run install:all
-   ```
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd skyrc
 
-2. **Set up BlueSky OAuth:**
+# Install dependencies
+npm install
+```
+
+### Step 2: Generate OAuth Keys
+
+```bash
+# Generate ECDSA key pair for BlueSky OAuth
+npm run deploy:setup
+```
+
+This will:
+- Create `keys/` directory with public/private key files
+- Generate a `.env` file with development configuration
+- Output the private key for production use
+
+### Step 3: Configure BlueSky OAuth
+
+1. **Register your app with BlueSky:**
    - Go to [BlueSky Developer Console](https://bsky.app/settings/app-passwords)
-   - Create a new app and get your client ID and secret
-   - Copy `env.example` to `.env` and fill in your credentials:
+   - Create a new app
+   - Set **Client ID** to: `http://localhost:2222/client-metadata.json`
+   - Set **Redirect URI** to: `http://localhost:2222/auth/oauth-callback`
+
+2. **Update environment variables** (if needed):
    ```bash
-   cp env.example .env
+   # Edit .env file
+   nano .env
    ```
 
-3. **Configure environment variables:**
+   The generated `.env` should look like:
    ```env
-   BLUESKY_CLIENT_ID=your_client_id_here
-   BLUESKY_CLIENT_SECRET=your_client_secret_here
-BLUESKY_REDIRECT_URI=http://localhost:2222/auth/callback
-PORT=2222
+   # BlueSky OAuth Configuration
+   BLUESKY_CLIENT_ID=http://localhost:2222/client-metadata.json
+   BLUESKY_REDIRECT_URI=http://localhost:2222/oauth-callback
+
+   # Server Configuration
+   PORT=2222
    NODE_ENV=development
-   SESSION_SECRET=your_session_secret_here
+
+   # Session Configuration
+   SESSION_SECRET=your_generated_session_secret
+
+   # Private Key for OAuth (DO NOT SHARE)
+   PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...
    ```
 
-4. **Start development servers:**
-   ```bash
-   npm run dev
-   ```
+### Step 4: Start Development Server
 
-   This will start:
-   - Backend server on `http://localhost:2222`
-   - Frontend dev server on `http://localhost:5173`
+```bash
+# Start the development server
+npm run dev
+```
 
-### Usage
+This will start the server on `http://localhost:2222`
 
-1. **Visit the app**: Open `http://localhost:5173` in your browser
+### Step 5: Test the Application
+
+1. **Visit the app**: Open `http://localhost:2222` in your browser
 2. **Login**: Click "Login with BlueSky" to authenticate
 3. **Join rooms**: Navigate to different URLs to join different chat rooms:
-   - `http://localhost:5173/php` - PHP chat room
-   - `http://localhost:5173/javascript` - JavaScript chat room
-   - `http://localhost:5173/general` - General chat room
+   - `http://localhost:2222/php` - PHP chat room
+   - `http://localhost:2222/javascript` - JavaScript chat room
+   - `http://localhost:2222/general` - General chat room
+
+## Production Deployment
+
+### Option 1: Railway (Recommended - Easiest)
+
+**Why Railway:**
+- ✅ Zero configuration - just connect GitHub repo
+- ✅ Automatic HTTPS with custom domains
+- ✅ Built-in environment variables management
+- ✅ Automatic deployments from Git
+- ✅ Free tier available
+
+**Steps:**
+
+1. **Push to GitHub** (if not already done)
+
+2. **Connect Railway:**
+   - Go to [Railway.app](https://railway.app)
+   - Sign up with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your SkyRC repository
+
+3. **Configure Environment Variables:**
+   ```env
+   NODE_ENV=production
+   BLUESKY_CLIENT_ID=https://yourdomain.com/client-metadata.json
+   BLUESKY_REDIRECT_URI=https://yourdomain.com/auth/oauth-callback
+   PORT=3000
+   SESSION_SECRET=your_secure_random_string_here
+   PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg...\n-----END PRIVATE KEY-----
+   ```
+
+4. **Add Custom Domain:**
+   - In Railway dashboard, go to "Settings" → "Domains"
+   - Add your custom domain
+   - Update DNS records as instructed
+
+5. **Update BlueSky OAuth Registration:**
+   - Go to BlueSky Developer Console
+   - Update **Client ID** to: `https://yourdomain.com/client-metadata.json`
+   - Update **Redirect URI** to: `https://yourdomain.com/auth/oauth-callback`
+
+6. **Deploy!** ✨
+
+**Cost:** Free tier → $5/month for custom domain
+
+---
+
+### Option 2: Render
+
+**Steps:**
+
+1. **Connect GitHub** to [Render.com](https://render.com)
+2. **Create Web Service** → Select your repo
+3. **Configure:**
+   - Build Command: `npm run build`
+   - Start Command: `npm start`
+   - Environment: Node.js
+4. **Add environment variables** (same as Railway)
+5. **Add custom domain**
+
+**Cost:** Free tier → $7/month for custom domain
+
+---
+
+### Option 3: Vercel
+
+**Steps:**
+
+1. **Connect GitHub** to [Vercel.com](https://vercel.com)
+2. **Import project**
+3. **Configure build settings:**
+   - Framework: Other
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+4. **Add environment variables**
+5. **Add custom domain**
+
+**Cost:** Free tier (generous limits)
+
+---
+
+### Option 4: DigitalOcean App Platform
+
+**Steps:**
+
+1. **Create App** in [DigitalOcean](https://cloud.digitalocean.com)
+2. **Connect GitHub** repository
+3. **Configure:**
+   - Source: GitHub repo
+   - Build Command: `npm run build`
+   - Run Command: `npm start`
+4. **Add environment variables**
+5. **Add custom domain**
+
+**Cost:** $5/month minimum
+
+---
+
+## Environment Variables Reference
+
+### Development (.env file)
+```env
+# BlueSky OAuth Configuration
+BLUESKY_CLIENT_ID=http://localhost:2222/client-metadata.json
+BLUESKY_REDIRECT_URI=http://localhost:2222/oauth-callback
+
+# Server Configuration
+PORT=2222
+NODE_ENV=development
+
+# Session Configuration
+SESSION_SECRET=your_generated_session_secret
+
+# Private Key for OAuth (DO NOT SHARE)
+PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...
+```
+
+### Production (Platform Environment Variables)
+```env
+NODE_ENV=production
+BLUESKY_CLIENT_ID=https://yourdomain.com/client-metadata.json
+BLUESKY_REDIRECT_URI=https://yourdomain.com/auth/oauth-callback
+PORT=3000
+SESSION_SECRET=your_very_secure_random_string_here
+PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg...\n-----END PRIVATE KEY-----
+```
+
+## Available Scripts
+
+```bash
+# Development
+npm run dev              # Start development server with hot reload
+npm run build            # Build TypeScript to JavaScript
+npm start                # Start production server
+npm run deploy:setup     # Generate OAuth keys (development & production)
+```
+
+## Project Structure
+
+```
+skyrc/
+├── src/                    # Backend source code
+│   ├── routes/            # Express routes (auth, health)
+│   ├── socket/            # Socket.IO handlers
+│   ├── types/             # TypeScript type definitions
+│   └── server.ts          # Main server file
+├── public/                # Frontend static files
+│   ├── css/              # Stylesheets (base, home, login, chat)
+│   ├── js/               # JavaScript files (home, login, chat)
+│   ├── home.html         # Home page
+│   ├── login.html        # Login page
+│   └── chat.html         # Chat page
+├── scripts/              # Utility scripts
+│   └── generate-keys.js  # OAuth key generation
+├── keys/                 # Generated OAuth keys (gitignored)
+├── .env                  # Environment variables (gitignored)
+├── package.json          # Dependencies and scripts
+└── README.md
+```
 
 ## API Endpoints
 
 ### Authentication
 - `GET /auth/login` - Get BlueSky OAuth authorization URL
-- `POST /auth/callback` - Handle OAuth callback
+- `GET /auth/oauth-callback` - Handle OAuth callback
 - `GET /auth/session/:sessionId` - Get current session
 - `POST /auth/logout/:sessionId` - Logout and clear session
+- `GET /auth/jwks.json` - JSON Web Key Set for OAuth
 
-### Health
+### Static Files
+- `GET /client-metadata.json` - OAuth client metadata
+- `GET /` - Home page
+- `GET /login` - Login page
+- `GET /:room` - Chat room page
+
+### API
+- `GET /api/rooms` - Get active rooms
 - `GET /health` - Server health check
 
 ## Socket.IO Events
@@ -105,79 +299,55 @@ PORT=2222
 - `user-typing` - User started typing
 - `user-stopped-typing` - User stopped typing
 
-## Project Structure
-
-```
-skyrc/
-├── src/                    # Backend source code
-│   ├── routes/            # Express routes
-│   ├── socket/            # Socket.IO handlers
-│   ├── types/             # TypeScript type definitions
-│   └── server.ts          # Main server file
-├── client/                # React frontend
-│   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── types/         # TypeScript types
-│   │   └── App.tsx        # Main React app
-│   └── public/            # Static assets
-├── package.json           # Backend dependencies
-└── README.md
-```
-
-## Development
-
-### Available Scripts
-
-- `npm run dev` - Start both backend and frontend in development mode
-- `npm run dev:server` - Start only the backend server
-- `npm run dev:client` - Start only the frontend dev server
-- `npm run build` - Build both backend and frontend for production
-- `npm start` - Start production server
-
-### Adding New Features
-
-1. **Backend**: Add new routes in `src/routes/` or Socket.IO handlers in `src/socket/`
-2. **Frontend**: Add new components in `client/src/components/` or hooks in `client/src/hooks/`
-3. **Types**: Update shared types in both `src/types/` and `client/src/types/`
-
-## Deployment
-
-### Environment Variables for Production
-
-```env
-NODE_ENV=production
-BLUESKY_CLIENT_ID=your_production_client_id
-BLUESKY_CLIENT_SECRET=your_production_client_secret
-BLUESKY_REDIRECT_URI=https://yourdomain.com/auth/callback
-CLIENT_URL=https://yourdomain.com
-PORT=2222
-SESSION_SECRET=your_secure_session_secret
-```
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
 ## Security Features
 
 - **Helmet.js** for security headers
-- **Rate limiting** to prevent abuse
+- **Rate limiting** (900 requests per 15 minutes)
 - **CORS** configuration
 - **Input sanitization** for room names
-- **Session management** with expiration
+- **Session management** with expiration (2 hours idle)
 - **No conversation logging** for privacy
+- **ECDSA key pairs** for OAuth security
+- **Content Security Policy** headers
+
+## Troubleshooting
+
+### Common Issues
+
+**1. OAuth Login Fails:**
+- Check BlueSky OAuth registration URLs match your domain
+- Verify `PRIVATE_KEY` environment variable is set correctly
+- Check browser console for CORS errors
+
+**2. Room Names Not Working:**
+- Room names must be alphanumeric with dashes/underscores only
+- Cannot start/end with special characters
+- Reserved routes: `/`, `/about`, `/health`, `/auth`
+
+**3. Mobile Safari Issues:**
+- App uses dual storage (localStorage + cookies) for compatibility
+- Check if private browsing mode is enabled
+
+**4. Deployment Issues:**
+- Ensure all environment variables are set
+- Check build logs for TypeScript errors
+- Verify custom domain DNS is pointing correctly
+
+### Getting Help
+
+- **GitHub Issues**: Create an issue for bugs or feature requests
+- **BlueSky OAuth**: Check [BlueSky OAuth documentation](https://atproto.com/guides/oauth)
+- **Socket.IO**: Review [Socket.IO documentation](https://socket.io/docs/)
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+4. Test locally: `npm run dev`
+5. Commit your changes: `git commit -m 'Add amazing feature'`
+6. Push to the branch: `git push origin feature/amazing-feature`
+7. Submit a pull request
 
 ## License
 

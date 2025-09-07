@@ -37,9 +37,9 @@
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.logo svg {
-    width: 36px;
-    height: 36px;
+.speech-emoji {
+    font-size: 2rem;
+    line-height: 1;
     color: white;
 }
 
@@ -56,6 +56,30 @@
     color: #6b7280;
     font-weight: 400;
     margin: 0;
+}
+
+.about-section {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.about-link {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.about-link:hover {
+    background: #f3f4f6;
+    color: #374151;
+    border-color: #d1d5db;
 }
 
 /* Active Rooms */

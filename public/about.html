@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About SkyRC</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #3b82f6;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .back-link:hover {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .about-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+        
+        .about-header p {
+            font-size: 1.25rem;
+            color: #6b7280;
+        }
+        
+        .content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content h2 {
+            color: #1f2937;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .content h2:first-child {
+            margin-top: 0;
+        }
+        
+        .content h3 {
+            color: #374151;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .content p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .content ul, .content ol {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .content code {
+            background: #f3f4f6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.875rem;
+        }
+        
+        .content pre {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        
+        .content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .highlight {
+            background: #fef3c7;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="about-container">
+        <a href="/" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Back to SkyRC
+        </a>
+        
+        <div class="about-header">
+            <h1>About SkyRC</h1>
+            <p>IRC-like chatrooms powered by BlueSky OAuth</p>
+        </div>
+        
+        <div class="content">
+            <h2>What is SkyRC?</h2>
+            <p>SkyRC is a modern IRC-like chat application that uses BlueSky OAuth for authentication. It provides real-time chatrooms where users can join different channels and communicate with others using their BlueSky identity.</p>
+            
+            <h2>Features</h2>
+            <ul>
+                <li><span class="highlight">BlueSky OAuth Integration</span> - Login with your BlueSky account</li>
+                <li><span class="highlight">Real-time Chat</span> - Instant messaging powered by Socket.IO</li>
+                <li><span class="highlight">Multiple Chatrooms</span> - Join different channels based on topics</li>
+                <li><span class="highlight">Custom PDS Support</span> - Works with custom BlueSky domains</li>
+                <li><span class="highlight">Mobile Friendly</span> - Responsive design for all devices</li>
+                <li><span class="highlight">Session Management</span> - Secure session handling with timeout</li>
+            </ul>
+            
+            <h2>Getting Started</h2>
+            <h3>Local Development</h3>
+            <ol>
+                <li>Clone the repository</li>
+                <li>Install dependencies: <code>npm install</code></li>
+                <li>Generate OAuth keys: <code>npm run build</code></li>
+                <li>Start development server: <code>npm run dev</code></li>
+                <li>Visit <code>http://localhost:3001</code></li>
+            </ol>
+            
+            <h3>BlueSky OAuth Setup</h3>
+            <p>To use SkyRC, you'll need to register your application with BlueSky:</p>
+            <ol>
+                <li>Visit <code>https://bsky.app/settings/app-passwords</code></li>
+                <li>Create a new app password</li>
+                <li>Use the generated credentials in your environment variables</li>
+            </ol>
+            
+            <h2>Deployment</h2>
+            <p>SkyRC can be deployed to various platforms:</p>
+            <ul>
+                <li><strong>Railway</strong> - Easy deployment with automatic HTTPS</li>
+                <li><strong>Render</strong> - Free tier available with custom domains</li>
+                <li><strong>DigitalOcean</strong> - Full control with App Platform</li>
+                <li><strong>Vercel</strong> - Great for static + serverless functions</li>
+            </ul>
+            
+            <h2>Security Features</h2>
+            <ul>
+                <li>ECDSA key pairs for OAuth authentication</li>
+                <li>Session timeout based on inactivity</li>
+                <li>Rate limiting to prevent abuse</li>
+                <li>Input validation for chatroom names</li>
+                <li>Secure cookie handling</li>
+            </ul>
+            
+            <h2>Technology Stack</h2>
+            <ul>
+                <li><strong>Backend:</strong> Node.js, Express, TypeScript</li>
+                <li><strong>Real-time:</strong> Socket.IO</li>
+                <li><strong>Authentication:</strong> BlueSky OAuth 2.0</li>
+                <li><strong>Frontend:</strong> Vanilla HTML, CSS, JavaScript</li>
+                <li><strong>Protocol:</strong> AT Protocol (BlueSky)</li>
+            </ul>
+            
+            <h2>Contributing</h2>
+            <p>SkyRC is open source and welcomes contributions! Feel free to submit issues, feature requests, or pull requests.</p>
+            
+            <h2>License</h2>
+            <p>This project is licensed under the MIT License - see the LICENSE file for details.</p>
+        </div>
+    </div>
+</body>
+</html>

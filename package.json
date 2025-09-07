@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "prebuild": "node scripts/generate-keys.js",
+    "start": "node dist/server.js",
+    "deploy:setup": "node scripts/generate-keys.js"
   },
   "keywords": [
     "chat",
@@ -26,6 +28,7 @@
     "express": "^4.18.2",
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
+    "marked": "^16.2.1",
     "socket.io": "^4.7.4"
   },
   "devDependencies": {

@@ -40,12 +40,13 @@
     height: 48px;
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     border-radius: 12px;
+    flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.logo svg {
-    width: 32px;
-    height: 32px;
+.speech-emoji {
+    font-size: 1.5rem;
+    line-height: 1;
     color: white;
 }
 
@@ -55,6 +56,7 @@
     color: #1f2937;
     letter-spacing: -0.02em;
 }
+
 
 /* Login Form */
 .login-form {
