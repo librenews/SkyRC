@@ -50,6 +50,9 @@ const initializeOAuthClient = async () => {
     console.log('Private key length:', privateKey.length);
     console.log('Private key starts with:', privateKey.substring(0, 50));
     console.log('Private key ends with:', privateKey.substring(privateKey.length - 50));
+    console.log('Private key full length check:', privateKey.length);
+    console.log('Private key contains BEGIN:', privateKey.includes('-----BEGIN PRIVATE KEY-----'));
+    console.log('Private key contains END:', privateKey.includes('-----END PRIVATE KEY-----'));
     
     // Additional validation
     if (privateKey.length < 100) {
@@ -125,6 +128,7 @@ const initializeOAuthClient = async () => {
     
     // If the private key is corrupted, try generating a new one
     const errorMessage = error instanceof Error ? error.message : String(error);
+    console.log('🔍 Checking if fallback should trigger. Error message:', errorMessage);
     if (errorMessage.includes('not enough data') || errorMessage.includes('Invalid private key')) {
       console.log('🔄 Attempting to generate a new private key...');
       try {
