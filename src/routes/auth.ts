@@ -68,6 +68,12 @@ const initializeOAuthClient = async () => {
       ? `http://127.0.0.1:${port}` 
       : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
     
+    console.log('🔍 OAuth client metadata debug:');
+    console.log('  - BLUESKY_CLIENT_ID:', process.env.BLUESKY_CLIENT_ID);
+    console.log('  - baseUrl:', baseUrl);
+    console.log('  - final client_id:', process.env.BLUESKY_CLIENT_ID || baseUrl);
+    console.log('  - final client_uri:', baseUrl);
+    
     oauthClient = new NodeOAuthClient({
       clientMetadata: {
         client_id: process.env.BLUESKY_CLIENT_ID || baseUrl,
@@ -135,6 +141,12 @@ const initializeOAuthClient = async () => {
         const baseUrl = isDevelopment 
           ? `http://127.0.0.1:${port}` 
           : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
+        
+        console.log('🔍 Fallback OAuth client metadata debug:');
+        console.log('  - BLUESKY_CLIENT_ID:', process.env.BLUESKY_CLIENT_ID);
+        console.log('  - baseUrl:', baseUrl);
+        console.log('  - final client_id:', process.env.BLUESKY_CLIENT_ID || baseUrl);
+        console.log('  - final client_uri:', baseUrl);
         
         oauthClient = new NodeOAuthClient({
           clientMetadata: {

@@ -79,12 +79,19 @@ app.get('/about', (req, res) => {
 
 // OAuth endpoints (must be before static files)
 app.get('/client-metadata.json', (req, res) => {
+  // Determine base URL dynamically
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const port = process.env.PORT || '3001';
+  const baseUrl = isDevelopment 
+    ? `http://127.0.0.1:${port}` 
+    : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
+  
   res.json({
-    client_id: process.env.BLUESKY_CLIENT_ID || 'https://dev.libre.news/client-metadata.json',
+    client_id: process.env.BLUESKY_CLIENT_ID || baseUrl,
     client_name: 'SkyRC Chat',
-    client_uri: 'https://dev.libre.news',
-    logo_uri: 'https://dev.libre.news/logo.png',
-    redirect_uris: [process.env.BLUESKY_REDIRECT_URI || 'https://dev.libre.news/auth/oauth-callback'],
+    client_uri: baseUrl,
+    logo_uri: `${baseUrl}/logo.png`,
+    redirect_uris: [process.env.BLUESKY_REDIRECT_URI || `${baseUrl}/auth/oauth-callback`],
     grant_types: ['authorization_code', 'refresh_token'],
     scope: 'atproto',
     response_types: ['code'],
@@ -92,7 +99,7 @@ app.get('/client-metadata.json', (req, res) => {
     token_endpoint_auth_method: 'private_key_jwt',
     token_endpoint_auth_signing_alg: 'ES256',
     dpop_bound_access_tokens: true,
-    jwks_uri: 'https://dev.libre.news/auth/jwks.json',
+    jwks_uri: `${baseUrl}/auth/jwks.json`,
   });
 });
 
