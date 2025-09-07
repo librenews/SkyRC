@@ -114,7 +114,8 @@ const initializeOAuthClient = async () => {
     console.error('Error details:', error);
     
     // If the private key is corrupted, try generating a new one
-    if (error.message?.includes('not enough data') || error.message?.includes('Invalid private key')) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes('not enough data') || errorMessage.includes('Invalid private key')) {
       console.log('🔄 Attempting to generate a new private key...');
       try {
         const crypto = require('crypto');
@@ -136,11 +137,22 @@ const initializeOAuthClient = async () => {
           : `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'yourdomain.com'}`;
         
         oauthClient = new NodeOAuthClient({
-          clientId: `${baseUrl}/client-metadata.json`,
-          clientSecret: 'not-needed-for-pkce',
-          redirectUri: `${baseUrl}/auth/oauth-callback`,
-          scope: ['atproto', 'transition:generic'],
-          key: newKey,
+          clientMetadata: {
+            client_id: process.env.BLUESKY_CLIENT_ID || `${baseUrl}/client-metadata.json`,
+            client_name: 'SkyRC Chat',
+            client_uri: baseUrl,
+            logo_uri: `${baseUrl}/logo.png`,
+            redirect_uris: [process.env.BLUESKY_REDIRECT_URI || `${baseUrl}/auth/oauth-callback`],
+            grant_types: ['authorization_code', 'refresh_token'],
+            scope: 'atproto transition:generic',
+            response_types: ['code'],
+            application_type: 'web',
+            token_endpoint_auth_method: 'private_key_jwt',
+            token_endpoint_auth_signing_alg: 'ES256',
+            dpop_bound_access_tokens: true,
+            jwks_uri: `${baseUrl}/auth/jwks.json`,
+          },
+          keyset: [newKey],
           stateStore: {
             async set(key: string, state: any): Promise<void> {
               stateStore.set(key, state);
