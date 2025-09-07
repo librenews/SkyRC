@@ -66,11 +66,11 @@ const initializeOAuthClient = async () => {
     // Use different URLs for development vs production
     const baseUrl = isDevelopment 
       ? `http://127.0.0.1:${port}` 
-      : (process.env.CLIENT_URL || 'https://dev.libre.news');
+      : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
     
     oauthClient = new NodeOAuthClient({
       clientMetadata: {
-        client_id: process.env.BLUESKY_CLIENT_ID || `${baseUrl}/client-metadata.json`,
+        client_id: process.env.BLUESKY_CLIENT_ID || baseUrl,
         client_name: 'SkyRC Chat',
         client_uri: baseUrl,
         logo_uri: `${baseUrl}/logo.png`,
@@ -134,11 +134,11 @@ const initializeOAuthClient = async () => {
         const port = process.env.PORT || '3001';
         const baseUrl = isDevelopment 
           ? `http://127.0.0.1:${port}` 
-          : `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'yourdomain.com'}`;
+          : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
         
         oauthClient = new NodeOAuthClient({
           clientMetadata: {
-            client_id: process.env.BLUESKY_CLIENT_ID || `${baseUrl}/client-metadata.json`,
+            client_id: process.env.BLUESKY_CLIENT_ID || baseUrl,
             client_name: 'SkyRC Chat',
             client_uri: baseUrl,
             logo_uri: `${baseUrl}/logo.png`,
