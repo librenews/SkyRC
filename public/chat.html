@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat - SkyRC</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="/css/base.css">
     <link rel="stylesheet" href="/css/chat.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,20 +20,28 @@
             <header class="chat-header">
                 <!-- Mobile Header (visible on small screens) -->
                 <div class="mobile-header">
-                    <a href="/" class="home-link" title="Back to Home">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
-                    <div class="mobile-room-info">
-                        <h1 id="room-name" class="room-name">#general</h1>
-                        <span id="user-count" class="user-count">0 users</span>
-                    </div>
                     <button class="mobile-menu-btn" id="mobile-menu-btn" title="Menu">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </button>
+                    <div class="mobile-room-info">
+                        <h1 id="room-name" class="room-name">#general</h1>
+                        <span id="user-count" class="user-count">0 users</span>
+                    </div>
+                    <div class="mobile-profile-avatar">
+                        <div class="profile-trigger" id="profile-trigger-mobile-simple">
+                            <img id="user-avatar-mobile-simple" src="" alt="User Avatar" class="user-avatar">
+                        </div>
+                        <div class="profile-dropdown" id="profile-dropdown-mobile-simple">
+                            <button id="logout-btn-mobile-simple" class="dropdown-item logout-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Desktop Header (visible on larger screens) -->
@@ -97,26 +107,6 @@
                                     <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor"/>
                                 </svg>
                             </button>
-                        </div>
-                        <div class="mobile-menu-links">
-                            <a href="/about" class="about-link">About SkyRC</a>
-                        </div>
-                        <div class="mobile-user-profile">
-                            <div class="profile-trigger" id="profile-trigger-mobile">
-                                <img id="user-avatar-mobile" src="" alt="User Avatar" class="user-avatar">
-                                <span id="user-name-mobile" class="user-name">Loading...</span>
-                                <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
-                            <div class="profile-dropdown" id="profile-dropdown-mobile">
-                                <button id="logout-btn-mobile" class="dropdown-item logout-item">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                    Sign Out
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

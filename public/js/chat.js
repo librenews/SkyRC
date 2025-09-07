@@ -187,7 +187,7 @@ class SkyRCChat {
             });
         }
 
-        // Profile dropdown (mobile)
+        // Profile dropdown (mobile - old)
         const profileTriggerMobile = document.getElementById('profile-trigger-mobile');
         const profileDropdownMobile = document.getElementById('profile-dropdown-mobile');
         
@@ -214,6 +214,31 @@ class SkyRCChat {
                 }
             });
         }
+
+        // Profile dropdown (mobile - new simple avatar)
+        const profileTriggerMobileSimple = document.getElementById('profile-trigger-mobile-simple');
+        const profileDropdownMobileSimple = document.getElementById('profile-dropdown-mobile-simple');
+        
+        if (profileTriggerMobileSimple && profileDropdownMobileSimple) {
+            profileTriggerMobileSimple.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = profileDropdownMobileSimple.classList.contains('show');
+                
+                // Close any other dropdowns
+                document.querySelectorAll('.profile-dropdown.show').forEach(dropdown => {
+                    if (dropdown !== profileDropdownMobileSimple) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+                
+                // Toggle current dropdown
+                if (isActive) {
+                    profileDropdownMobileSimple.classList.remove('show');
+                } else {
+                    profileDropdownMobileSimple.classList.add('show');
+                }
+            });
+        }
         
         // Close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
@@ -225,11 +250,15 @@ class SkyRCChat {
                 profileDropdownMobile.classList.remove('active');
                 profileTriggerMobile.classList.remove('active');
             }
+            if (profileTriggerMobileSimple && profileDropdownMobileSimple && !profileTriggerMobileSimple.contains(e.target) && !profileDropdownMobileSimple.contains(e.target)) {
+                profileDropdownMobileSimple.classList.remove('show');
+            }
         });
 
         // Logout buttons (desktop and mobile)
         const logoutBtn = document.getElementById('logout-btn');
         const logoutBtnMobile = document.getElementById('logout-btn-mobile');
+        const logoutBtnMobileSimple = document.getElementById('logout-btn-mobile-simple');
         
         if (logoutBtn) {
             logoutBtn.addEventListener('click', () => {
@@ -239,6 +268,12 @@ class SkyRCChat {
         
         if (logoutBtnMobile) {
             logoutBtnMobile.addEventListener('click', () => {
+                this.logout();
+            });
+        }
+
+        if (logoutBtnMobileSimple) {
+            logoutBtnMobileSimple.addEventListener('click', () => {
                 this.logout();
             });
         }
@@ -316,6 +351,7 @@ class SkyRCChat {
         if (this.user) {
             const userNameEl = document.getElementById('user-name');
             const userAvatarEl = document.getElementById('user-avatar');
+            const userAvatarMobileSimpleEl = document.getElementById('user-avatar-mobile-simple');
             
             if (userNameEl) {
                 userNameEl.textContent = this.user.displayName || this.user.handle;
@@ -324,6 +360,11 @@ class SkyRCChat {
             if (userAvatarEl && this.user.avatar) {
                 userAvatarEl.src = this.user.avatar;
                 userAvatarEl.alt = this.user.displayName || this.user.handle;
+            }
+
+            if (userAvatarMobileSimpleEl && this.user.avatar) {
+                userAvatarMobileSimpleEl.src = this.user.avatar;
+                userAvatarMobileSimpleEl.alt = this.user.displayName || this.user.handle;
             }
         }
         
