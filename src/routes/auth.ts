@@ -56,6 +56,7 @@ const initializeOAuthClient = async () => {
     console.log('Private key contains END:', privateKey.includes('-----END PRIVATE KEY-----'));
     
     // Handle case where privateKey is null (corrupted or missing)
+    let key;
     if (!privateKey) {
       console.log('🔄 No valid private key found, generating new one...');
       const crypto = require('crypto');
@@ -73,8 +74,6 @@ const initializeOAuthClient = async () => {
       if (privateKey.length < 100) {
         throw new Error(`Private key too short: ${privateKey.length} characters`);
       }
-      
-      let key;
       try {
         key = await JoseKey.fromImportable(privateKey, 'key1');
         console.log('✅ Private key loaded successfully');
