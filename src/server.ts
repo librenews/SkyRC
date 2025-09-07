@@ -86,6 +86,10 @@ app.get('/client-metadata.json', (req, res) => {
     ? `http://127.0.0.1:${port}` 
     : process.env.CLIENT_URL;
   
+  if (!baseUrl) {
+    return res.status(500).json({ error: 'CLIENT_URL environment variable is required for production' });
+  }
+  
   res.json({
     client_id: process.env.BLUESKY_CLIENT_ID || baseUrl,
     client_name: 'SkyRC Chat',

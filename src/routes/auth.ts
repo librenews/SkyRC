@@ -68,6 +68,10 @@ const initializeOAuthClient = async () => {
       ? `http://127.0.0.1:${port}` 
       : process.env.CLIENT_URL;
     
+    if (!baseUrl) {
+      throw new Error('CLIENT_URL environment variable is required for production');
+    }
+    
     console.log('🔍 OAuth client metadata debug:');
     console.log('  - BLUESKY_CLIENT_ID:', process.env.BLUESKY_CLIENT_ID);
     console.log('  - baseUrl:', baseUrl);
@@ -141,6 +145,10 @@ const initializeOAuthClient = async () => {
         const baseUrl = isDevelopment 
           ? `http://127.0.0.1:${port}` 
           : process.env.CLIENT_URL;
+        
+        if (!baseUrl) {
+          throw new Error('CLIENT_URL environment variable is required for production');
+        }
         
         console.log('🔍 Fallback OAuth client metadata debug:');
         console.log('  - BLUESKY_CLIENT_ID:', process.env.BLUESKY_CLIENT_ID);
@@ -366,6 +374,11 @@ router.get('/login', async (req, res) => {
     const baseUrl = isDevelopment 
       ? `http://127.0.0.1:${port}` 
       : process.env.CLIENT_URL;
+    
+    if (!baseUrl) {
+      throw new Error('CLIENT_URL environment variable is required for production');
+    }
+    
     const redirectUri = `${baseUrl}/auth/oauth-callback`;
     console.log('🔄 Redirect URI:', redirectUri);
     
