@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - SkyRC</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/chat.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="screen active">
+        <div class="chat-container">
+            <!-- Header -->
+            <header class="chat-header">
+                <!-- Mobile Header (visible on small screens) -->
+                <div class="mobile-header">
+                    <a href="/" class="home-link" title="Back to Home">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <div class="mobile-room-info">
+                        <h1 id="room-name" class="room-name">#general</h1>
+                        <span id="user-count" class="user-count">0 users</span>
+                    </div>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn" title="Menu">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Desktop Header (visible on larger screens) -->
+                <div class="desktop-header">
+                    <div class="room-info">
+                        <a href="/" class="home-link" title="Back to Home">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                        <h1 id="room-name-desktop" class="room-name">#general</h1>
+                        <span id="user-count-desktop" class="user-count">0 users</span>
+                    </div>
+                    
+                    <!-- Room Input -->
+                    <div class="room-input-container">
+                        <input 
+                            type="text" 
+                            id="room-input" 
+                            placeholder="Enter room name (e.g., javascript, python, general)"
+                            class="room-input"
+                            maxlength="50"
+                        >
+                        <button id="join-room-btn" class="btn-join-room" title="Join Room">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="user-profile">
+                        <div class="profile-trigger" id="profile-trigger">
+                            <img id="user-avatar" src="" alt="User Avatar" class="user-avatar">
+                            <span id="user-name" class="user-name">Loading...</span>
+                            <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <button id="logout-btn" class="dropdown-item logout-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu (hidden by default) -->
+                <div class="mobile-menu" id="mobile-menu">
+                    <div class="mobile-menu-content">
+                        <div class="mobile-room-input">
+                            <input 
+                                type="text" 
+                                id="room-input-mobile" 
+                                placeholder="Enter room name"
+                                class="room-input"
+                                maxlength="50"
+                            >
+                            <button id="join-room-btn-mobile" class="btn-join-room" title="Join Room">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mobile-user-profile">
+                            <div class="profile-trigger" id="profile-trigger-mobile">
+                                <img id="user-avatar-mobile" src="" alt="User Avatar" class="user-avatar">
+                                <span id="user-name-mobile" class="user-name">Loading...</span>
+                                <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="profile-dropdown" id="profile-dropdown-mobile">
+                                <button id="logout-btn-mobile" class="dropdown-item logout-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Sign Out
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Messages -->
+            <div id="messages" class="chat-messages"></div>
+
+            <!-- Input -->
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="message-input" 
+                    placeholder="Type your message..."
+                    class="chat-input"
+                    maxlength="500"
+                >
+                <button id="send-btn" class="btn-send" title="Send Message">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="screen">
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Connecting...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+</body>
+</html>
