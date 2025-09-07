@@ -25,7 +25,8 @@ const privateKey = (() => {
     // Validate the key format
     if (!processedKey.includes('-----BEGIN PRIVATE KEY-----') || !processedKey.includes('-----END PRIVATE KEY-----')) {
       console.error('❌ Invalid private key format - missing PEM headers');
-      throw new Error('Invalid private key format');
+      console.log('🔄 Will generate new key instead...');
+      return null; // Return null to trigger key generation
     }
     
     return processedKey;
@@ -54,35 +55,53 @@ const initializeOAuthClient = async () => {
     console.log('Private key contains BEGIN:', privateKey.includes('-----BEGIN PRIVATE KEY-----'));
     console.log('Private key contains END:', privateKey.includes('-----END PRIVATE KEY-----'));
     
-    // Additional validation
-    if (privateKey.length < 100) {
-      throw new Error(`Private key too short: ${privateKey.length} characters`);
-    }
-    
-    let key;
-    try {
-      key = await JoseKey.fromImportable(privateKey, 'key1');
-      console.log('✅ Private key loaded successfully');
-    } catch (keyError) {
-      console.error('❌ Failed to parse private key:', keyError);
-      const keyErrorMessage = keyError instanceof Error ? keyError.message : String(keyError);
-      console.log('🔍 Key parsing error message:', keyErrorMessage);
+    // Handle case where privateKey is null (corrupted or missing)
+    if (!privateKey) {
+      console.log('🔄 No valid private key found, generating new one...');
+      const crypto = require('crypto');
+      const newKeyPair = crypto.generateKeyPairSync('ec', {
+        namedCurve: 'prime256v1',
+        publicKeyEncoding: { type: 'spki', format: 'pem' },
+        privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+      });
+      const newPrivateKey = newKeyPair.privateKey;
+      console.log('🔑 Generated new private key');
+      key = await JoseKey.fromImportable(newPrivateKey, 'key1');
+      console.log('✅ New private key loaded successfully');
+    } else {
+      // Additional validation
+      if (privateKey.length < 100) {
+        throw new Error(`Private key too short: ${privateKey.length} characters`);
+      }
       
-      if (keyErrorMessage.includes('not enough data') || keyErrorMessage.includes('Invalid private key')) {
-        console.log('🔄 Attempting to generate a new private key...');
-        const crypto = require('crypto');
-        const newKeyPair = crypto.generateKeyPairSync('ec', {
-          namedCurve: 'prime256v1',
-          publicKeyEncoding: { type: 'spki', format: 'pem' },
-          privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
-        });
+      let key;
+      try {
+        key = await JoseKey.fromImportable(privateKey, 'key1');
+        console.log('✅ Private key loaded successfully');
+      } catch (keyError) {
+        console.error('❌ Failed to parse private key:', keyError);
+        const keyErrorMessage = keyError instanceof Error ? keyError.message : String(keyError);
+        console.log('🔍 Key parsing error message:', keyErrorMessage);
         
-        const newPrivateKey = newKeyPair.privateKey;
-        console.log('🔑 Generated new private key, retrying...');
-        key = await JoseKey.fromImportable(newPrivateKey, 'key1');
-        console.log('✅ New private key loaded successfully');
-      } else {
-        throw keyError; // Re-throw if it's not a key parsing error
+        if (keyErrorMessage.includes('not enough data') || keyErrorMessage.includes('Invalid private key')) {
+          console.log('🔄 Attempting to generate a new private key...');
+          const crypto = require('crypto');
+          const newKeyPair = crypto.generateKeyPairSync('ec', {
+            namedCurve: 'prime256v1',
+            publicKeyEncoding: { type: 'spki', format: 'pem' },
+            privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+          });
+          
+          const newPrivateKey = newKeyPair.privateKey;
+          console.log('🔑 Generated new private key, retrying...');
+          console.log('🔑 New key length:', newPrivateKey.length);
+          console.log('🔑 New key preview:', newPrivateKey.substring(0, 50));
+          key = await JoseKey.fromImportable(newPrivateKey, 'key1');
+          console.log('✅ New private key loaded successfully');
+          console.log('⚠️  Note: Using auto-generated private key. For production, consider setting a proper PRIVATE_KEY environment variable.');
+        } else {
+          throw keyError; // Re-throw if it's not a key parsing error
+        }
       }
     }
     
