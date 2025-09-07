@@ -72,6 +72,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// About page - serves static HTML
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'about.html'));
+});
+
 // OAuth endpoints (must be before static files)
 app.get('/client-metadata.json', (req, res) => {
   res.json({

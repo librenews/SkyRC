@@ -55,38 +55,7 @@ This will:
 - Generate a `.env` file with development configuration
 - Output the private key for production use
 
-### Step 3: Configure BlueSky OAuth
-
-1. **Register your app with BlueSky:**
-   - Go to [BlueSky Developer Console](https://bsky.app/settings/app-passwords)
-   - Create a new app
-   - Set **Client ID** to: `http://localhost:2222/client-metadata.json`
-   - Set **Redirect URI** to: `http://localhost:2222/auth/oauth-callback`
-
-2. **Update environment variables** (if needed):
-   ```bash
-   # Edit .env file
-   nano .env
-   ```
-
-   The generated `.env` should look like:
-   ```env
-   # BlueSky OAuth Configuration
-   BLUESKY_CLIENT_ID=http://localhost:2222/client-metadata.json
-   BLUESKY_REDIRECT_URI=http://localhost:2222/oauth-callback
-
-   # Server Configuration
-   PORT=2222
-   NODE_ENV=development
-
-   # Session Configuration
-   SESSION_SECRET=your_generated_session_secret
-
-   # Private Key for OAuth (DO NOT SHARE)
-   PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...
-   ```
-
-### Step 4: Start Development Server
+### Step 3: Start Development Server
 
 ```bash
 # Start the development server
