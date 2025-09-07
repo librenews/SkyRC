@@ -11,8 +11,25 @@ const stateStore = new Map<string, any>();
 const sessionStore = new Map<string, any>();
 
 // Load private key from environment with fallback generation
-const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') || 
-  (() => {
+const privateKey = (() => {
+  if (process.env.PRIVATE_KEY) {
+    console.log('🔑 Found PRIVATE_KEY in environment');
+    console.log('Raw key length:', process.env.PRIVATE_KEY.length);
+    console.log('Raw key preview:', process.env.PRIVATE_KEY.substring(0, 50));
+    
+    // Try to process the key
+    let processedKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
+    console.log('Processed key length:', processedKey.length);
+    console.log('Processed key preview:', processedKey.substring(0, 50));
+    
+    // Validate the key format
+    if (!processedKey.includes('-----BEGIN PRIVATE KEY-----') || !processedKey.includes('-----END PRIVATE KEY-----')) {
+      console.error('❌ Invalid private key format - missing PEM headers');
+      throw new Error('Invalid private key format');
+    }
+    
+    return processedKey;
+  } else {
     console.log('⚠️ No PRIVATE_KEY found, generating temporary key...');
     const crypto = require('crypto');
     const keyPair = crypto.generateKeyPairSync('ec', {
@@ -21,7 +38,8 @@ const privateKey = process.env.PRIVATE_KEY?.replace(/\\n/g, '\n') ||
     });
     console.log('🔑 Temporary key generated (not persistent across restarts)');
     return keyPair.privateKey;
-  })();
+  }
+})();
 
 // Initialize BlueSky OAuth client
 let oauthClient: NodeOAuthClient | null = null;
@@ -31,6 +49,12 @@ const initializeOAuthClient = async () => {
     console.log('🔑 Loading private key...');
     console.log('Private key length:', privateKey.length);
     console.log('Private key starts with:', privateKey.substring(0, 50));
+    console.log('Private key ends with:', privateKey.substring(privateKey.length - 50));
+    
+    // Additional validation
+    if (privateKey.length < 100) {
+      throw new Error(`Private key too short: ${privateKey.length} characters`);
+    }
     
     const key = await JoseKey.fromImportable(privateKey, 'key1');
     console.log('✅ Private key loaded successfully');
@@ -88,6 +112,63 @@ const initializeOAuthClient = async () => {
   } catch (error) {
     console.error('❌ Failed to initialize OAuth client:', error);
     console.error('Error details:', error);
+    
+    // If the private key is corrupted, try generating a new one
+    if (error.message?.includes('not enough data') || error.message?.includes('Invalid private key')) {
+      console.log('🔄 Attempting to generate a new private key...');
+      try {
+        const crypto = require('crypto');
+        const newKeyPair = crypto.generateKeyPairSync('ec', {
+          namedCurve: 'prime256v1',
+          privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+        });
+        
+        console.log('🔑 Generated new private key, retrying OAuth initialization...');
+        
+        // Retry with the new key
+        const newKey = await JoseKey.fromImportable(newKeyPair.privateKey, 'key1');
+        
+        // Determine if we're in development mode
+        const isDevelopment = process.env.NODE_ENV === 'development';
+        const port = process.env.PORT || '3001';
+        const baseUrl = isDevelopment 
+          ? `http://127.0.0.1:${port}` 
+          : `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'yourdomain.com'}`;
+        
+        oauthClient = new NodeOAuthClient({
+          clientId: `${baseUrl}/client-metadata.json`,
+          clientSecret: 'not-needed-for-pkce',
+          redirectUri: `${baseUrl}/auth/oauth-callback`,
+          scope: ['atproto', 'transition:generic'],
+          key: newKey,
+          stateStore: {
+            async set(key: string, state: any): Promise<void> {
+              stateStore.set(key, state);
+            },
+            async get(key: string): Promise<any> {
+              return stateStore.get(key);
+            },
+            async del(key: string): Promise<void> {
+              stateStore.delete(key);
+            },
+          },
+          sessionStore: {
+            async set(sub: string, session: NodeSavedSession): Promise<void> {
+              sessionStore.set(sub, session);
+            },
+            async get(sub: string): Promise<NodeSavedSession | undefined> {
+              return sessionStore.get(sub);
+            },
+            async del(sub: string): Promise<void> {
+              sessionStore.delete(sub);
+            },
+          },
+        });
+        console.log('✅ OAuth client initialized successfully with new key');
+      } catch (retryError) {
+        console.error('❌ Failed to initialize OAuth client even with new key:', retryError);
+      }
+    }
   }
 };
 
