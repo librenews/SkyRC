@@ -59,8 +59,32 @@ const initializeOAuthClient = async () => {
       throw new Error(`Private key too short: ${privateKey.length} characters`);
     }
     
-    const key = await JoseKey.fromImportable(privateKey, 'key1');
-    console.log('✅ Private key loaded successfully');
+    let key;
+    try {
+      key = await JoseKey.fromImportable(privateKey, 'key1');
+      console.log('✅ Private key loaded successfully');
+    } catch (keyError) {
+      console.error('❌ Failed to parse private key:', keyError);
+      const keyErrorMessage = keyError instanceof Error ? keyError.message : String(keyError);
+      console.log('🔍 Key parsing error message:', keyErrorMessage);
+      
+      if (keyErrorMessage.includes('not enough data') || keyErrorMessage.includes('Invalid private key')) {
+        console.log('🔄 Attempting to generate a new private key...');
+        const crypto = require('crypto');
+        const newKeyPair = crypto.generateKeyPairSync('ec', {
+          namedCurve: 'prime256v1',
+          publicKeyEncoding: { type: 'spki', format: 'pem' },
+          privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+        });
+        
+        const newPrivateKey = newKeyPair.privateKey;
+        console.log('🔑 Generated new private key, retrying...');
+        key = await JoseKey.fromImportable(newPrivateKey, 'key1');
+        console.log('✅ New private key loaded successfully');
+      } else {
+        throw keyError; // Re-throw if it's not a key parsing error
+      }
+    }
     
     // Determine if we're in development mode
     const isDevelopment = process.env.NODE_ENV === 'development';
