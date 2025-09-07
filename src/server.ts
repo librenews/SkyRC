@@ -79,19 +79,19 @@ app.get('/about', (req, res) => {
 
 // OAuth endpoints (must be before static files)
 app.get('/client-metadata.json', (req, res) => {
-  // Determine base URL dynamically
+  // Determine base URL dynamically from environment
   const isDevelopment = process.env.NODE_ENV === 'development';
   const port = process.env.PORT || '3001';
   const baseUrl = isDevelopment 
     ? `http://127.0.0.1:${port}` 
-    : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
+    : process.env.CLIENT_URL;
   
   res.json({
     client_id: process.env.BLUESKY_CLIENT_ID || baseUrl,
     client_name: 'SkyRC Chat',
     client_uri: baseUrl,
     logo_uri: `${baseUrl}/logo.png`,
-    redirect_uris: [process.env.BLUESKY_REDIRECT_URI || `${baseUrl}/auth/oauth-callback`],
+    redirect_uris: [`${baseUrl}/auth/oauth-callback`],
     grant_types: ['authorization_code', 'refresh_token'],
     scope: 'atproto',
     response_types: ['code'],

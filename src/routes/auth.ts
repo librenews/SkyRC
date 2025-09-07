@@ -66,7 +66,7 @@ const initializeOAuthClient = async () => {
     // Use different URLs for development vs production
     const baseUrl = isDevelopment 
       ? `http://127.0.0.1:${port}` 
-      : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
+      : process.env.CLIENT_URL;
     
     console.log('🔍 OAuth client metadata debug:');
     console.log('  - BLUESKY_CLIENT_ID:', process.env.BLUESKY_CLIENT_ID);
@@ -80,7 +80,7 @@ const initializeOAuthClient = async () => {
         client_name: 'SkyRC Chat',
         client_uri: baseUrl,
         logo_uri: `${baseUrl}/logo.png`,
-        redirect_uris: [process.env.BLUESKY_REDIRECT_URI || `${baseUrl}/auth/oauth-callback`],
+        redirect_uris: [`${baseUrl}/auth/oauth-callback`],
         grant_types: ['authorization_code', 'refresh_token'],
         scope: 'atproto transition:generic',
         response_types: ['code'],
@@ -140,7 +140,7 @@ const initializeOAuthClient = async () => {
         const port = process.env.PORT || '3001';
         const baseUrl = isDevelopment 
           ? `http://127.0.0.1:${port}` 
-          : (process.env.CLIENT_URL || `https://${process.env.RAILWAY_PUBLIC_DOMAIN || 'skyrc.social'}`);
+          : process.env.CLIENT_URL;
         
         console.log('🔍 Fallback OAuth client metadata debug:');
         console.log('  - BLUESKY_CLIENT_ID:', process.env.BLUESKY_CLIENT_ID);
@@ -154,7 +154,7 @@ const initializeOAuthClient = async () => {
             client_name: 'SkyRC Chat',
             client_uri: baseUrl,
             logo_uri: `${baseUrl}/logo.png`,
-            redirect_uris: [process.env.BLUESKY_REDIRECT_URI || `${baseUrl}/auth/oauth-callback`],
+            redirect_uris: [`${baseUrl}/auth/oauth-callback`],
             grant_types: ['authorization_code', 'refresh_token'],
             scope: 'atproto transition:generic',
             response_types: ['code'],
@@ -360,7 +360,13 @@ router.get('/login', async (req, res) => {
     console.log('🎲 Generated state:', state);
     console.log('🏠 Room to redirect to after login:', room || 'general (default)');
     
-    const redirectUri = process.env.BLUESKY_REDIRECT_URI || 'https://dev.libre.news/auth/oauth-callback';
+    // Determine base URL for redirect URI
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const port = process.env.PORT || '3001';
+    const baseUrl = isDevelopment 
+      ? `http://127.0.0.1:${port}` 
+      : process.env.CLIENT_URL;
+    const redirectUri = `${baseUrl}/auth/oauth-callback`;
     console.log('🔄 Redirect URI:', redirectUri);
     
     console.log('🌐 Calling oauthClient.authorize with PDS:', pdsUrl);
