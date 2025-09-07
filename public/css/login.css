@@ -36,18 +36,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    border-radius: 12px;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.speech-emoji {
-    font-size: 1.5rem;
-    line-height: 1;
-    color: white;
+.logo-image {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
 }
 
 .logo-text {
@@ -190,14 +185,9 @@
         margin-bottom: 1.5rem;
     }
     
-    .logo {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .logo svg {
-        width: 28px;
-        height: 28px;
+    .logo-image {
+        width: 36px;
+        height: 36px;
     }
     
     .logo-text {
@@ -228,14 +218,9 @@
         margin-bottom: 1.25rem;
     }
     
-    .logo {
-        width: 36px;
-        height: 36px;
-    }
-    
-    .logo svg {
-        width: 24px;
-        height: 24px;
+    .logo-image {
+        width: 32px;
+        height: 32px;
     }
     
     .logo-text {

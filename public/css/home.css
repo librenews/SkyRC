@@ -29,18 +29,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    border-radius: 16px;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.speech-emoji {
-    font-size: 2rem;
-    line-height: 1;
-    color: white;
+.logo-image {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
 }
 
 .header h1 {
@@ -341,14 +336,9 @@
         margin-bottom: 0.75rem;
     }
     
-    .logo {
-        width: 48px;
-        height: 48px;
-    }
-    
-    .logo svg {
-        width: 28px;
-        height: 28px;
+    .logo-image {
+        width: 40px;
+        height: 40px;
     }
     
     .header h1 {
@@ -402,14 +392,9 @@
         margin-bottom: 0.5rem;
     }
     
-    .logo {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .logo svg {
-        width: 24px;
-        height: 24px;
+    .logo-image {
+        width: 36px;
+        height: 36px;
     }
     
     .header h1 {
