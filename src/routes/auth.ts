@@ -83,6 +83,8 @@ const initializeOAuthClient = async () => {
         console.error('❌ Failed to parse private key:', keyError);
         const keyErrorMessage = keyError instanceof Error ? keyError.message : String(keyError);
         console.log('🔍 Key parsing error message:', keyErrorMessage);
+        console.log('🔍 Error type:', typeof keyError);
+        console.log('🔍 Error constructor:', keyError?.constructor?.name);
         
         if (keyErrorMessage.includes('not enough data') || keyErrorMessage.includes('Invalid private key')) {
           console.log('🔄 Attempting to generate a new private key...');
@@ -264,7 +266,15 @@ const initializeOAuthClient = async () => {
 };
 
 // Initialize the OAuth client
-initializeOAuthClient();
+initializeOAuthClient().catch(error => {
+  console.error('💥 OAuth client initialization failed:', error);
+  console.error('💥 Error details:', {
+    message: error instanceof Error ? error.message : String(error),
+    name: error instanceof Error ? error.name : 'Unknown',
+    stack: error instanceof Error ? error.stack : undefined
+  });
+  console.log('⚠️  OAuth client not available - authentication will not work');
+});
 
 // Expose client metadata
 router.get('/client-metadata.json', (req, res) => {
