@@ -47,6 +47,7 @@ let oauthClient: NodeOAuthClient | null = null;
 
 const initializeOAuthClient = async () => {
   try {
+    console.log('🚀 Starting OAuth client initialization...');
     console.log('🔑 Loading private key...');
     console.log('Private key length:', privateKey.length);
     console.log('Private key starts with:', privateKey.substring(0, 50));
@@ -113,6 +114,7 @@ const initializeOAuthClient = async () => {
     console.log('  PORT:', process.env.PORT);
     console.log('  CLIENT_URL:', process.env.CLIENT_URL);
     console.log('  isDevelopment:', isDevelopment);
+    console.log('  All env vars:', Object.keys(process.env).filter(k => k.includes('CLIENT') || k.includes('BLUESKY')));
     
     // Use different URLs for development vs production
     const baseUrl = isDevelopment 
