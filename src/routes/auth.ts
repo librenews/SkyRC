@@ -85,9 +85,10 @@ const initializeOAuthClient = async () => {
         console.log('🔍 Key parsing error message:', keyErrorMessage);
         console.log('🔍 Error type:', typeof keyError);
         console.log('🔍 Error constructor:', keyError?.constructor?.name);
+        console.log('🔍 About to check if fallback should trigger...');
         
         if (keyErrorMessage.includes('not enough data') || keyErrorMessage.includes('Invalid private key')) {
-          console.log('🔄 Attempting to generate a new private key...');
+          console.log('🔄 Fallback condition met, generating new private key...');
           const crypto = require('crypto');
           const newKeyPair = crypto.generateKeyPairSync('ec', {
             namedCurve: 'prime256v1',
