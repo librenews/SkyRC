@@ -76,6 +76,7 @@ const initializeOAuthClient = async () => {
         throw new Error(`Private key too short: ${privateKey.length} characters`);
       }
       try {
+        console.log('🔄 Attempting to parse private key...');
         key = await JoseKey.fromImportable(privateKey, 'key1');
         console.log('✅ Private key loaded successfully');
       } catch (keyError) {
@@ -104,6 +105,8 @@ const initializeOAuthClient = async () => {
         }
       }
     }
+    
+    console.log('🔑 Private key processing complete, moving to environment variables...');
     
     // Determine if we're in development mode
     const isDevelopment = process.env.NODE_ENV === 'development';
